@@ -17,6 +17,7 @@ public class Film extends AbstracItem{
     private String description;
 
     @NotNull
+    @Past
     private LocalDate releaseDate;
 
     @Positive

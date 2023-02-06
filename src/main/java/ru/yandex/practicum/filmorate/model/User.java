@@ -7,10 +7,7 @@ import lombok.NonNull;
 
 import org.apache.coyote.http11.filters.SavedRequestInputFilter;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 
 @Data
@@ -24,7 +21,7 @@ public class User extends AbstracItem{
     @NotBlank
     private String login;
     @NotNull
-    @PastOrPresent
+    @Past
     private LocalDate birthday;
 
 }
