@@ -10,6 +10,6 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @ToString
 public abstract class AbstracItem {
-    @NotNull
-    int id;
+
+    Long id;
 }
