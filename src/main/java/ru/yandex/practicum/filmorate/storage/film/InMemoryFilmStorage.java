@@ -62,22 +62,9 @@ public class InMemoryFilmStorage implements FilmStorage{
 
     @Override
     public List<Film> getMostPopularFilms(Integer count) {
-//       return  filmStorage.values().stream().sorted((p0,p1)->{
-//           int comp = compare(p0,p1);
-//           return comp;
-//       }).limit(10).collect(Collectors.toList());
-
         return  filmStorage.values().stream().sorted(Comparator.comparing(Film::getRate))
                 .limit(count).collect(Collectors.toList());
     }
-
-//    private int compare(Film p0, Film p1) {
-//       //прямой порядок сортировки
-//        return Integer.compare(p0.getRate(), p1.getRate());
-//
-//    }
-
-
 
 
 

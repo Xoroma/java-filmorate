@@ -11,13 +11,19 @@ import ru.yandex.practicum.filmorate.model.ErrorResponse;
 @RestControllerAdvice
 public class ErrorHandler {
 
-//    @ExceptionHandler
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    public ErrorResponse handleMyValidationExeption(final MyValidateExeption e) {
-//        return new ErrorResponse(
-//                String.format("Ошибка с полем \"%s\"", e.getParameter())
-//        );
-//    }
+    @ExceptionHandler({
+            FilmNotFoundExeption.class,
+            FriendNotFoundExeption.class,
+            LikeNotFoundExeption.class,
+            UserNotFoundExeption.class
+    })
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleNotFoundExeption(final RuntimeException e) {
+        return new ErrorResponse(
+                e.getMessage()
+        );
+    }
+
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -35,45 +41,18 @@ public class ErrorHandler {
         );
     }
 
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleUserNotFoundExeption(final UserNotFoundExeption e) {
-        return new ErrorResponse(
-                e.getMessage()
-        );
-    }
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleFilmNotFoundExeption(final FilmNotFoundExeption e) {
-        return new ErrorResponse(
-                e.getMessage()
-        );
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handleLikeAlreadyExistExeption(final LikeAlreadyExistExeption e) {
         return new ErrorResponse(
                 e.getMessage()
         );
     }
 
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleLikeNotFoundExeption(final LikeNotFoundExeption e) {
-        return new ErrorResponse(
-                e.getMessage()
-        );
-    }
 
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleFriendNotFoundExeption(final FriendNotFoundExeption e) {
-        return new ErrorResponse(
-                e.getMessage()
-        );
-    }
+
+
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
@@ -84,12 +63,11 @@ public class ErrorHandler {
     }
 
 
-
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleThrowable(final Throwable e) {
         return new ErrorResponse(
-                "Непонятно че происходит"
+                e.getMessage()
         );
     }
 

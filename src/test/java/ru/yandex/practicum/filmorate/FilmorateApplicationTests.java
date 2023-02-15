@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.yandex.practicum.filmorate.controllers.FilmController;
 import ru.yandex.practicum.filmorate.controllers.UserController;
@@ -22,57 +23,17 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SpringBootTest
 class FilmorateApplicationTests {
 
+	@Autowired
+    private UserStorage userStorage;
+	@Autowired
+	private InMemoryFilmStorage inMemoryFilmStorage;
 	@Test
 	void contextLoads() {
 	}
 
-	FilmController filmController = new FilmController(new FilmService(new InMemoryFilmStorage()));
-	UserController userController = new UserController(new UserService(new UserStorage() {
-		@Override
-		public List<User> getUsers() {
-			return null;
-		}
 
-		@Override
-		public User getUser(Long id) {
-			return null;
-		}
-
-		@Override
-		public User postUser(User item) throws MyValidateExeption {
-			return null;
-		}
-
-		@Override
-		public User updateUser(User item) throws MyValidateExeption {
-			return null;
-		}
-
-		@Override
-		public void addFriend(Long targetUserId, Long friendId) {
-
-		}
-
-		@Override
-		public void removeFriend(Long targetUserId, Long friendId) {
-
-		}
-
-		@Override
-		public List<Long> getAllFriends(User user) {
-			return null;
-		}
-
-		@Override
-		public List<User> getListOfFriends(Long id) {
-			return null;
-		}
-
-		@Override
-		public List<User> getCommonFriends(Long id, Long otherId) {
-			return null;
-		}
-	}));
+	FilmController filmController = new FilmController(new FilmService(inMemoryFilmStorage));
+	UserController userController = new UserController(new UserService(userStorage));
 
 
 

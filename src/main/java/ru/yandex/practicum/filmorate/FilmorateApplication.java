@@ -14,10 +14,4 @@ public class FilmorateApplication {
 		SpringApplication.run(FilmorateApplication.class, args);
 	}
 
-//	@Autowired
-//	RequestMappingHandlerMapping requestMappingHandlerMapping;
-//	@PostConstruct
-//	public void printEndPoints(){
-//		requestMappingHandlerMapping.getHandlerMethods().forEach((k,v) -> System.out.println(k + " -> " + v));
-//	}
 }

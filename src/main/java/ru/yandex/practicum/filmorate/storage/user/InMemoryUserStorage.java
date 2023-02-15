@@ -66,9 +66,6 @@ public class InMemoryUserStorage implements UserStorage{
     public void removeFriend(Long targetUserId, Long friendId) {
         User user = getUser(targetUserId);
         user.deleteFriend(friendId);
-//         автоматический delete из друзей,
-//        User friendUser = userStorage.get(friendId);
-//        friendUser.deleteFriend(targetUserId);
     }
 
     @Override
