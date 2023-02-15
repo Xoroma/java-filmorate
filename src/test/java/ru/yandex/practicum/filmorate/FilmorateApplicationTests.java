@@ -11,6 +11,7 @@ import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.film.FilmService;
 import ru.yandex.practicum.filmorate.service.user.UserService;
 import ru.yandex.practicum.filmorate.storage.film.InMemoryFilmStorage;
+import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import java.time.Duration;
@@ -24,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class FilmorateApplicationTests {
 
 	@Autowired
-    private UserStorage userStorage;
+    private final UserStorage userStorage = new InMemoryUserStorage();
 	@Autowired
 	private InMemoryFilmStorage inMemoryFilmStorage;
 	@Test
