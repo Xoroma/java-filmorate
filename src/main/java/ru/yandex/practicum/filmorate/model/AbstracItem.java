@@ -11,5 +11,5 @@ import javax.validation.constraints.NotNull;
 @ToString
 public abstract class AbstracItem {
 
-    Long id;
+    Integer id;
 }

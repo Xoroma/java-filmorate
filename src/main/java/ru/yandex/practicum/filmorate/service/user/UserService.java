@@ -18,15 +18,15 @@ public class UserService {
     }
 
 
-    public void addFriend(Long targetUserId, Long friendId){
+    public void addFriend(Integer targetUserId, Integer friendId){
         userStorage.addFriend(targetUserId, friendId);
     }
 
-    public void removeFriend(Long targetUserId, Long friendId){
+    public void removeFriend(Integer targetUserId, Integer friendId){
        userStorage.removeFriend(targetUserId,friendId);
     }
 
-    public List<Long> getAllFriends(User user){
+    public List<Integer> getAllFriends(User user){
        return userStorage.getAllFriends(user);
     }
 
@@ -44,15 +44,15 @@ public class UserService {
         return userStorage.updateUser(user);
     }
 
-    public User getUser(long userId) {
+    public User getUser(Integer userId) {
         return userStorage.getUser(userId);
     }
 
-    public List<User> getListOfFriends(Long id) {
+    public List<User> getListOfFriends(Integer id) {
         return userStorage.getListOfFriends(id);
     }
 
-    public List<User> getCommonFriends(Long id, Long otherId) {
+    public List<User> getCommonFriends(Integer id, Integer otherId) {
         return userStorage.getCommonFriends(id, otherId);
     }
 }

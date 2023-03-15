@@ -11,9 +11,9 @@ import java.util.List;
 
 public abstract class AbstractItemController<T extends AbstracItem> {
 
-    private HashMap<Long, T> dataStorage = new HashMap<>();
+    private HashMap<Integer, T> dataStorage = new HashMap<>();
 
-    private Long counter = 0l;
+    private Integer counter = 0;
 
     public List<T> getItem(){
       return new ArrayList<T>(dataStorage.values());

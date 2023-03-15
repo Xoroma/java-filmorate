@@ -1,9 +1,9 @@
 package ru.yandex.practicum.filmorate.storage.user;
 
+import org.springframework.data.relational.core.sql.In;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exeptions.MyValidateExeption;
 import ru.yandex.practicum.filmorate.exeptions.UserNotFoundExeption;
-import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.ArrayList;
@@ -14,13 +14,13 @@ import java.util.stream.Collectors;
 
 @Component
 public class InMemoryUserStorage implements UserStorage{
-    private HashMap<Long, User> userStorage = new HashMap();
+    private HashMap<Integer, User> userStorage = new HashMap();
 
-    private Long counter = 0l;
+    private Integer counter = 0;
 
 
     @Override
-    public User getUser(Long id) {
+    public User getUser(Integer id) {
         if(userStorage.containsKey(id)){
             return userStorage.get(id);
         }else {
@@ -53,7 +53,7 @@ public class InMemoryUserStorage implements UserStorage{
 
 
     @Override
-    public void addFriend(Long targetUserId, Long friendId) {
+    public void addFriend(Integer targetUserId, Integer friendId) {
         User user = getUser(targetUserId);
         user.addFriend(friendId);
         // автоматический аппрув в друзья,
@@ -63,33 +63,38 @@ public class InMemoryUserStorage implements UserStorage{
     }
 
     @Override
-    public void removeFriend(Long targetUserId, Long friendId) {
+    public void removeFriend(Integer targetUserId, Integer friendId) {
         User user = getUser(targetUserId);
         user.deleteFriend(friendId);
     }
 
     @Override
-    public List<Long> getAllFriends(User user) {
-        Long id = user.getId();
-        return (List<Long>) user.getFriendsIds();
+    public List<Integer> getAllFriends(User user) {
+        Integer id = user.getId();
+        return (List<Integer>) user.getFriendsIds();
     }
 
-    public List<User> getListOfFriends(Long id){
+    public List<User> getListOfFriends(Integer id){
         User user = userStorage.get(id);
         return List.copyOf(user.getFriendsIds().stream()
                 .map(s->userStorage.get(s))
                 .collect(Collectors.toList()));
     }
 
-   public List<User> getCommonFriends(Long id, Long otherId){
+   public List<User> getCommonFriends(Integer id, Integer otherId){
         User user = userStorage.get(id);
         User otherUser = userStorage.get(otherId);
 
-        Set<Long> listOfFriends =otherUser.getFriendsIds();
+        Set<Integer> listOfFriends =otherUser.getFriendsIds();
         return  List.copyOf(user.getFriendsIds().stream()
                 .filter(listOfFriends::contains)
                 .map(s->userStorage.get(s))
                 .collect(Collectors.toList()));
+    }
+
+    @Override
+    public void removeUser(int userId) {
+        userStorage.remove(userId);
     }
 
     void validate(User user) throws MyValidateExeption{};

@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.controllers;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.dao.UserDbStorage;
 import ru.yandex.practicum.filmorate.exeptions.MyValidateExeption;
 import ru.yandex.practicum.filmorate.exeptions.SelfFriendsDeleteExeption;
 import ru.yandex.practicum.filmorate.exeptions.WrongFriendIdExeption;
@@ -21,21 +22,28 @@ import java.util.List;
 @RequestMapping("/users")
 @Slf4j
 public class UserController {
-    private final UserService userService;
+//    private final UserService userService;
+//
+//    @Autowired
+//    public UserController(UserService userService) {
+//        this.userService = userService;
+//    }
+    @Autowired
+    private final UserDbStorage userDbStorage;
 
     @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
+    public UserController(UserDbStorage userDbStorage) {
+        this.userDbStorage = userDbStorage;
     }
 
     @GetMapping("/{id}")
-    public User getUser(@PathVariable("id") long userId) {
-        return  userService.getUser(userId);
+    public User getUser(@PathVariable("id") Integer userId) {
+        return  userDbStorage.getUser(userId);
     }
 
     @GetMapping
     public List<User> getUsers(){
-        return userService.getUsers();
+        return userDbStorage.getUsers();
     }
 
 
@@ -43,19 +51,19 @@ public class UserController {
     public User postUser(@Valid @RequestBody User user) throws MyValidateExeption {
         validate(user);
         log.info("User {} was post to dataStorage",user);
-        return  userService.postUser(user);
+        return  userDbStorage.postUser(user);
     }
 
     @PutMapping
     public User updateUser(@Valid @RequestBody User user) throws MyValidateExeption {
         validate(user);
         log.info("User {} was updated in dataStorage",user);
-        return userService.updateUser(user);
+        return userDbStorage.updateUser(user);
     }
 
     //Методы добавления в друзья,удаления, получение списка общих друзей.
    @PutMapping("/{id}/friends/{friendId}")
-   public void addFriend(@PathVariable("id") Long targetUserId, @PathVariable Long friendId){
+   public void addFriend(@PathVariable("id") Integer targetUserId, @PathVariable Integer friendId){
         if(targetUserId == friendId){
             throw new selfFriendsAddingExeption("It's imposible to  self adding");
         }
@@ -63,31 +71,34 @@ public class UserController {
             throw  new WrongFriendIdExeption("Friend id must be positive");
         }
        log.info("User {} was added to friendList {} ",friendId,targetUserId);
-        userService.addFriend(targetUserId,friendId);
+        userDbStorage.addFriend(targetUserId,friendId);
    }
-
-
-
     @DeleteMapping("/{id}/friends/{friendId}")
-    public void deleteFriend(@PathVariable("id") Long targetUserId, @PathVariable Long friendId){
+    public void deleteFriend(@PathVariable("id") Integer targetUserId, @PathVariable Integer friendId){
         if(targetUserId == friendId){
             throw new SelfFriendsDeleteExeption("It's imposible to  self delete");
         }
         log.info("User {} was deleted from friendList {} ",friendId,targetUserId);
-        userService.removeFriend(targetUserId,friendId);
+        userDbStorage.removeFriend(targetUserId,friendId);
+    }
+
+    @DeleteMapping("/{userId}")
+    public void deleteUser(@PathVariable int userId){
+        userDbStorage.removeUser(userId);
+        log.info("Пользователь удален");
     }
 
 
     @GetMapping("/{id}/friends")
-    public List<User> getListOfFriends(@PathVariable Long id){
+    public List<User> getListOfFriends(@PathVariable Integer id){
         log.info("User {} was asked for get friendList {} ",id);
-        return userService.getListOfFriends(id);
+        return userDbStorage.getListOfFriends(id);
     }
 
     @GetMapping("/{id}/friends/common/{otherId}")
-    public List<User> getCommonFriends(@PathVariable("id") Long id, @PathVariable("otherId") Long otherId){
+    public List<User> getCommonFriends(@PathVariable("id") Integer id, @PathVariable("otherId") Integer otherId){
         log.info("User {} and {} was asked for get common friendList ",id, otherId);
-       return userService.getCommonFriends(id,otherId);
+       return userDbStorage.getCommonFriends(id,otherId);
     }
 
     void validate(User user) throws MyValidateExeption {

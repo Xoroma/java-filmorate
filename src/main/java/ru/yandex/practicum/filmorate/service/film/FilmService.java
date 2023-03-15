@@ -31,16 +31,16 @@ public class FilmService {
         return filmStorage.updateFilm(film);
     }
 
-    public Film getFilm(long filmId) {
+    public Film getFilm(int filmId) {
         return filmStorage.getFilm(filmId);
     }
 
-    public void addLike(Long filmId, Long userId) {
+    public void addLike(Integer filmId, Integer userId) {
         filmStorage.addLike(filmId,userId);
     }
 
 
-    public void deleteLike(Long filmId, Long userId) {
+    public void deleteLike(Integer filmId, Integer userId) {
         filmStorage.removeLike(filmId,userId);
     }
 

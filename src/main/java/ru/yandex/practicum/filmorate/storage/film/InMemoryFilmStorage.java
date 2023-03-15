@@ -5,21 +5,19 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exeptions.FilmNotFoundExeption;
 import ru.yandex.practicum.filmorate.exeptions.MyValidateExeption;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.model.MPA;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
 public class InMemoryFilmStorage implements FilmStorage{
-    private HashMap<Long, Film> filmStorage = new HashMap<Long, Film>();
+    private HashMap<Integer, Film> filmStorage = new HashMap<Integer, Film>();
 
-    private Long counter = 0l;
+    private Integer counter = 0;
 
-    public Film getFilm(long filmId){
+    public Film getFilm(int filmId){
         if(filmStorage.containsKey(filmId)){
         return filmStorage.get(filmId);
         }else {
@@ -49,13 +47,13 @@ public class InMemoryFilmStorage implements FilmStorage{
 
 
     @Override
-    public void addLike(Long targetFilmId, Long userId) {
+    public void addLike(Integer targetFilmId, Integer userId) {
         Film film = filmStorage.get(targetFilmId);
         film.addLike(userId);
     }
 
     @Override
-    public void removeLike(Long targetFilmId, Long userId) {
+    public void removeLike(Integer targetFilmId, Integer userId) {
         Film film = filmStorage.get(targetFilmId);
         film.deleteLike(userId);
     }
@@ -64,6 +62,31 @@ public class InMemoryFilmStorage implements FilmStorage{
     public List<Film> getMostPopularFilms(Integer count) {
         return  filmStorage.values().stream().sorted(Comparator.comparing(Film::getRate))
                 .limit(count).collect(Collectors.toList());
+    }
+
+    @Override
+    public Genre getGenre(int id) {
+        return null;
+    }
+
+    @Override
+    public List<Genre> getListOfGenres() {
+        return null;
+    }
+
+    @Override
+    public MPA getMPA(int id) {
+        return null;
+    }
+
+    @Override
+    public List<MPA> getListOfMPAs() {
+        return null;
+    }
+
+    @Override
+    public void removeFilm(int i) {
+        filmStorage.remove(i);
     }
 
 

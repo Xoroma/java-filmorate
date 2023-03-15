@@ -15,7 +15,9 @@ public class ErrorHandler {
             FilmNotFoundExeption.class,
             FriendNotFoundExeption.class,
             LikeNotFoundExeption.class,
-            UserNotFoundExeption.class
+            UserNotFoundExeption.class,
+            GenreNotFoundException.class,
+            MpaNotFoundException.class
     })
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleNotFoundExeption(final RuntimeException e) {

@@ -1,10 +1,14 @@
 package ru.yandex.practicum.filmorate.controllers;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.dao.FilmDbStorage;
 import ru.yandex.practicum.filmorate.exeptions.MyValidateExeption;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.model.MPA;
 import ru.yandex.practicum.filmorate.service.film.FilmService;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 
@@ -13,62 +17,90 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/films")
+//@RequestMapping("/films")
 @Slf4j
+@AllArgsConstructor
 public class FilmController{
-    private FilmStorage filmStorage;
+    private final FilmDbStorage filmDbStorage;
 
-    private FilmService filmService;
+//    private FilmService filmService;
+
+
     private static final LocalDate LIMIT_BIRTHDAY__OF_FILM = LocalDate.of(1895,12,28);
 
-    @Autowired
-    public FilmController(FilmService filmService) {
-        this.filmService = filmService;
+//    @Autowired
+//    public FilmController(FilmService filmService) {
+//        this.filmService = filmService;
+//    }
+
+    @GetMapping("/films/{id}")
+    public Film getFilm(@PathVariable(value = "id") int filmId) {
+
+        return  filmDbStorage.getFilm(filmId);
     }
 
-    @GetMapping("/{id}")
-    public Film getFilm(@PathVariable(value = "id") long filmId) {
-
-        return  filmService.getFilm(filmId);
-    }
-
-    @GetMapping
+    @GetMapping("/films")
     public List<Film> getFilms() {
-        return  filmService.getFilms();
+        return  filmDbStorage.getFilms();
     }
 
-    @PostMapping
+    @PostMapping("/films")
     public Film postFilm(@Valid @RequestBody Film film) throws MyValidateExeption {
         validate(film);
         log.info("Film {} was post to dataStorage",film);
-        return filmService.postFilm(film);
+        return filmDbStorage.postFilm(film);
     }
 
-    @PutMapping
+    @PutMapping("/films")
     public Film updateFilm(@Valid @RequestBody Film film) throws MyValidateExeption {
         validate(film);
         log.info("Film {} was updated to dataStorage",film);
-        return filmService.updateFilm(film);
+        return filmDbStorage.updateFilm(film);
+    }
+
+    @DeleteMapping("/films/{filmId}")
+    public void removeFilm(@PathVariable int filmId){
+        filmDbStorage.removeFilm(filmId);
+        log.info("Фильм с id = {} удален", filmId);
     }
 
     // методы связанные с лайками(не собаками)
-    @PutMapping("/{id}/like/{userId}")
-    public void addLike(@PathVariable("id") Long filmId, @PathVariable("userId") Long userId){
-        filmService.addLike(filmId,userId);
+    @PutMapping("/films/{id}/like/{userId}")
+    public void addLike(@PathVariable("id") Integer filmId, @PathVariable("userId") Integer userId){
+        filmDbStorage.addLike(filmId,userId);
         log.info("Like {} was add to film",filmId);
     }
 
-    @DeleteMapping("/{id}/like/{userId}")
-    public void deleteLike(@PathVariable("id") Long filmId, @PathVariable("userId") Long userId){
-        filmService.deleteLike(filmId,userId);
+    @DeleteMapping("/films/{id}/like/{userId}")
+    public void deleteLike(@PathVariable("id") Integer filmId, @PathVariable("userId") Integer userId){
+        filmDbStorage.removeLike(filmId,userId);
         log.info("Like {} was delete from film",filmId);
     }
 
-    @GetMapping("/popular")
+    @GetMapping("/films/popular")
     public List<Film> getMostPopularFilms(@RequestParam(name = "count", defaultValue = "10") Integer count){
         log.info("Most popular films were returned");
-        return filmService.getMostPopularFilms(count);
+        return filmDbStorage.getMostPopularFilms(count);
+    }
 
+    @GetMapping("/genres")
+    public List<Genre> getListOfGenres(){
+        return  filmDbStorage.getListOfGenres();
+    }
+
+    @GetMapping("/genres/{id}")
+    public Genre getgenre(@PathVariable int id){
+        return filmDbStorage.getGenre(id);
+    }
+
+    @GetMapping("/mpa")
+    public List<MPA> getListOfMpas(){
+        return  filmDbStorage.getListOfMPAs();
+    }
+
+    @GetMapping("/mpa/{id}")
+    public MPA getMPA(@PathVariable int id){
+        return filmDbStorage.getMPA(id);
     }
 
 

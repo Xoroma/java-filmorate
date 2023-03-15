@@ -8,19 +8,21 @@ import java.util.List;
 public interface UserStorage {
     public List<User> getUsers();
 
-    public User getUser(Long id);
+    public User getUser(Integer id);
 
     public User postUser(User item) throws MyValidateExeption;
 
     public User updateUser(User item) throws MyValidateExeption;
 
-    public void addFriend(Long targetUserId, Long friendId);
+    public void addFriend(Integer targetUserId, Integer friendId);
 
-    public void removeFriend(Long targetUserId, Long friendId);
+    public void removeFriend(Integer targetUserId, Integer friendId);
 
-    public List<Long> getAllFriends(User user);
+    public List<Integer> getAllFriends(User user);
 
-    public List<User> getListOfFriends(Long id);
+    public List<User> getListOfFriends(Integer id);
 
-    public List<User> getCommonFriends(Long id, Long otherId);
+    public List<User> getCommonFriends(Integer id, Integer otherId);
+
+    void removeUser(int userId);
 }
