@@ -1,7 +1,6 @@
 package ru.yandex.practicum.filmorate.dao;
 
 import lombok.AllArgsConstructor;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -17,9 +16,7 @@ import ru.yandex.practicum.filmorate.model.MPA;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
-import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -63,7 +60,7 @@ public class FilmDAOTest {
     @Test
     public void shouldThrowExceptionForAddLikeForNonExistentFilm() throws MyValidateExeption {
         User user = makeDefaultUser();
-        userStorage.postUser(user);
+        userStorage.addUser(user);
 
         assertThrows(FilmNotFoundExeption.class, () -> filmStorage.addLike(1, 1));
     }
@@ -114,7 +111,7 @@ public class FilmDAOTest {
         filmStorage.postFilm(film);
         film.setId(1);
         assertEquals(film, filmStorage.getFilm(1));
-        userStorage.postUser(user);
+        userStorage.addUser(user);
         user.setId(1);
         filmStorage.addLike(1, 1);
 

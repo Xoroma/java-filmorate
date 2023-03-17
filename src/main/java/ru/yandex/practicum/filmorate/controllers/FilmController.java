@@ -10,104 +10,95 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.MPA;
 import ru.yandex.practicum.filmorate.service.film.FilmService;
-import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-//@RequestMapping("/films")
 @Slf4j
 @AllArgsConstructor
 public class FilmController{
-    private final FilmDbStorage filmDbStorage;
-
-//    private FilmService filmService;
 
 
-    private static final LocalDate LIMIT_BIRTHDAY__OF_FILM = LocalDate.of(1895,12,28);
+    private final FilmService filmService;
 
-//    @Autowired
-//    public FilmController(FilmService filmService) {
-//        this.filmService = filmService;
-//    }
 
     @GetMapping("/films/{id}")
     public Film getFilm(@PathVariable(value = "id") int filmId) {
 
-        return  filmDbStorage.getFilm(filmId);
+        return  filmService.getFilm(filmId);
     }
 
     @GetMapping("/films")
     public List<Film> getFilms() {
-        return  filmDbStorage.getFilms();
+        return  filmService.getFilms();
     }
 
     @PostMapping("/films")
     public Film postFilm(@Valid @RequestBody Film film) throws MyValidateExeption {
         validate(film);
         log.info("Film {} was post to dataStorage",film);
-        return filmDbStorage.postFilm(film);
+        return filmService.postFilm(film);
     }
 
     @PutMapping("/films")
     public Film updateFilm(@Valid @RequestBody Film film) throws MyValidateExeption {
         validate(film);
         log.info("Film {} was updated to dataStorage",film);
-        return filmDbStorage.updateFilm(film);
+        return filmService.updateFilm(film);
     }
 
     @DeleteMapping("/films/{filmId}")
     public void removeFilm(@PathVariable int filmId){
-        filmDbStorage.removeFilm(filmId);
+        filmService.removeFilm(filmId);
         log.info("Фильм с id = {} удален", filmId);
     }
 
     // методы связанные с лайками(не собаками)
     @PutMapping("/films/{id}/like/{userId}")
     public void addLike(@PathVariable("id") Integer filmId, @PathVariable("userId") Integer userId){
-        filmDbStorage.addLike(filmId,userId);
+        filmService.addLike(filmId,userId);
         log.info("Like {} was add to film",filmId);
     }
 
     @DeleteMapping("/films/{id}/like/{userId}")
     public void deleteLike(@PathVariable("id") Integer filmId, @PathVariable("userId") Integer userId){
-        filmDbStorage.removeLike(filmId,userId);
+        filmService.removeLike(filmId,userId);
         log.info("Like {} was delete from film",filmId);
     }
 
     @GetMapping("/films/popular")
     public List<Film> getMostPopularFilms(@RequestParam(name = "count", defaultValue = "10") Integer count){
         log.info("Most popular films were returned");
-        return filmDbStorage.getMostPopularFilms(count);
+        return filmService.getMostPopularFilms(count);
     }
 
     @GetMapping("/genres")
     public List<Genre> getListOfGenres(){
-        return  filmDbStorage.getListOfGenres();
+        return  filmService.getListOfGenres();
     }
 
     @GetMapping("/genres/{id}")
     public Genre getgenre(@PathVariable int id){
-        return filmDbStorage.getGenre(id);
+        return filmService.getGenre(id);
     }
 
     @GetMapping("/mpa")
     public List<MPA> getListOfMpas(){
-        return  filmDbStorage.getListOfMPAs();
+        return  filmService.getListOfMPAs();
     }
 
     @GetMapping("/mpa/{id}")
     public MPA getMPA(@PathVariable int id){
-        return filmDbStorage.getMPA(id);
+        return filmService.getMPA(id);
     }
 
 
 
 
     void validate(Film film) throws MyValidateExeption {
-        if(film.getReleaseDate().isBefore(LIMIT_BIRTHDAY__OF_FILM)){
+        if(film.getReleaseDate().isBefore(FilmService.LIMIT_BIRTHDAY_OF_FILM)){
             throw new MyValidateExeption("Film release date must be older than 28.12.1895");
         }
 

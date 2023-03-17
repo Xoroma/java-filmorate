@@ -28,7 +28,7 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public List<User> getUsers() {
-       return jdbcTemplate.query("SELECT * FROM users",new UserMapper());
+        return jdbcTemplate.query("SELECT * FROM users", new UserMapper());
     }
 
     @Override
@@ -47,14 +47,16 @@ public class UserDbStorage implements UserStorage {
             if (user != null) {
                 user.addFriend(rowSet.getInt("to_user"));
 
-            } else throw new RuntimeException("Ошибка при получении пользователя.");
+            } else {
+                throw new RuntimeException("Ошибка при получении пользователя.");
+            }
         }
 
         return user;
     }
 
     @Override
-    public User postUser(User user) throws MyValidateExeption {
+    public User addUser(User user) throws MyValidateExeption {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         Number id;
         String sql = "INSERT INTO users (email, login, user_name, birthday) VALUES (?, ?, ?, ?)";
@@ -143,7 +145,7 @@ public class UserDbStorage implements UserStorage {
     public List<User> getListOfFriends(Integer id) {
         User user = getUser(id);
         return List.copyOf(user.getFriendsIds().stream()
-                .map(s->getUser(s))
+                .map(s -> getUser(s))
                 .collect(Collectors.toList()));
     }
 
@@ -152,10 +154,10 @@ public class UserDbStorage implements UserStorage {
         User user = getUser(id);
         User otherUser = getUser(otherId);
 
-        Set<Integer> listOfFriends =otherUser.getFriendsIds();
-        return  List.copyOf(user.getFriendsIds().stream()
+        Set<Integer> listOfFriends = otherUser.getFriendsIds();
+        return List.copyOf(user.getFriendsIds().stream()
                 .filter(listOfFriends::contains)
-                .map(s->getUser(s))
+                .map(s -> getUser(s))
                 .collect(Collectors.toList()));
     }
 
@@ -169,6 +171,17 @@ public class UserDbStorage implements UserStorage {
         jdbcTemplate.update("DELETE FROM users WHERE user_id = ?", userId);
     }
 
+    private Integer getUserIdFromDB(int id) {
+        Integer result;
+        try {
+            result = jdbcTemplate.queryForObject("SELECT user_id FROM users WHERE user_id = ?",
+                    Integer.class, id);
+        } catch (EmptyResultDataAccessException e) {
+            result = null;
+        }
+
+        return result;
+    }
 
     // Дополнительные методы и класс маппер.
     static class UserMapper implements RowMapper<User> {
@@ -182,18 +195,6 @@ public class UserDbStorage implements UserStorage {
                     rs.getDate("birthday").toLocalDate()
             );
         }
-    }
-
-    private Integer getUserIdFromDB(int id) {
-        Integer result;
-        try {
-            result = jdbcTemplate.queryForObject("SELECT user_id FROM users WHERE user_id = ?",
-                    Integer.class, id);
-        } catch (EmptyResultDataAccessException e) {
-            result = null;
-        }
-
-        return result;
     }
 
 }

@@ -51,22 +51,22 @@ public class Film{
     }
 
 
-    public void  addLike(Integer userId){
-       if(!likes.add(userId)){
-           throw new LikeAlreadyExistExeption("Вы уже поставили лайк фильму");
-       }
-       refreshRate();
-   }
+    public void addLike(Integer userId) {
+        if (!likes.add(userId)) {
+            throw new LikeAlreadyExistExeption("Вы уже поставили лайк фильму");
+        }
+        refreshRate();
+    }
 
 
-    public void  deleteLike(Integer userId){
-        if(!likes.remove(userId)){
+    public void deleteLike(Integer userId) {
+        if (!likes.remove(userId)) {
             throw new LikeNotFoundExeption("При удалении лайка у фильма, лайк пользователя с таким ай ди не найден");
         }
         refreshRate();
     }
 
-   // Жанр
+    // Жанр
     private void refreshRate(){
        this.rate = likes.size();
     }

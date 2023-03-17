@@ -27,7 +27,6 @@ public class User{
     @Past
     private LocalDate birthday;
 
- //   private FriendStatus friendStatus;
     @JsonIgnore
     private Set<Integer> friendsIds = new HashSet<>(); //список друзей пользователя по айдишникам.
 
@@ -41,7 +40,6 @@ public class User{
 
 
     public void addFriend(Integer friendId){
-//        if(this.friendStatus.equals(FriendStatus.UNCONFIRMED)) return;
         if(!friendsIds.add(friendId)){
             throw new FriendAlreadyExistExeption("Друг с таким ай ди уже добавлен");
         }
@@ -53,8 +51,5 @@ public class User{
         }
     }
 
-    enum FriendStatus{
-        CONFIRMED, UNCONFIRMED
-    }
 
 }

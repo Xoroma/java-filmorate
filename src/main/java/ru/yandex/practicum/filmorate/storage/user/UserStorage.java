@@ -10,7 +10,7 @@ public interface UserStorage {
 
     public User getUser(Integer id);
 
-    public User postUser(User item) throws MyValidateExeption;
+    public User addUser(User item) throws MyValidateExeption;
 
     public User updateUser(User item) throws MyValidateExeption;
 

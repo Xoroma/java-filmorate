@@ -30,7 +30,7 @@ public class UserDAOTest {
     @Test
     public void postUserTest() throws MyValidateExeption {
         User user = makeDefaultUser();
-        storage.postUser(user);
+        storage.addUser(user);
         user.setId(1);
 
         assertEquals(user, storage.getUser(1));
@@ -44,11 +44,11 @@ public class UserDAOTest {
     @Test
     public void getUsersTest() throws MyValidateExeption {
         User user1 = makeDefaultUser();
-        storage.postUser(user1);
+        storage.addUser(user1);
         user1.setId(1);
 
         User user2 = makeDefaultUser();
-        storage.postUser(user2);
+        storage.addUser(user2);
         user2.setId(2);
 
         assertEquals(List.of(user1, user2), storage.getUsers());
@@ -57,10 +57,10 @@ public class UserDAOTest {
     @Test
     public void addFriendTest() throws MyValidateExeption {
         User user1 = makeDefaultUser();
-        storage.postUser(user1);
+        storage.addUser(user1);
 
         User user2 = makeDefaultUser();
-        storage.postUser(user2);
+        storage.addUser(user2);
 
         storage.addFriend(1, 2);
         assertTrue(storage.getUser(1).getFriendsIds().contains(2));
@@ -75,7 +75,7 @@ public class UserDAOTest {
         assertThrows(UserNotFoundExeption.class, () -> storage.addFriend(1, 2));
 
         User user = makeDefaultUser();
-        storage.postUser(user);
+        storage.addUser(user);
 
         assertThrows(UserNotFoundExeption.class, () -> storage.addFriend(1, 2));
     }
@@ -83,7 +83,7 @@ public class UserDAOTest {
     @Test
     public void updateUserTest() throws MyValidateExeption {
         User user = makeDefaultUser();
-        storage.postUser(user);
+        storage.addUser(user);
 
         user.setName("New name");
         user.setId(1);
@@ -101,10 +101,10 @@ public class UserDAOTest {
     @Test
     public void removeFriendTest() throws MyValidateExeption {
         User user1 = makeDefaultUser();
-        storage.postUser(user1);
+        storage.addUser(user1);
 
         User user2 = makeDefaultUser();
-        storage.postUser(user2);
+        storage.addUser(user2);
 
         storage.addFriend(1, 2);
         assertTrue(storage.getUser(1).getFriendsIds().contains(2));
@@ -118,7 +118,7 @@ public class UserDAOTest {
         assertThrows(UserNotFoundExeption.class, () -> storage.removeFriend(1, 2));
 
         User user = makeDefaultUser();
-        storage.postUser(user);
+        storage.addUser(user);
 
         assertThrows(FriendNotFoundExeption.class, () -> storage.removeFriend(1, 2));
         assertThrows(UserNotFoundExeption.class, () -> storage.removeFriend(3, 1));
@@ -127,7 +127,7 @@ public class UserDAOTest {
     @Test
     public void removeUser() throws MyValidateExeption {
         User user = makeDefaultUser();
-        storage.postUser(user);
+        storage.addUser(user);
         user.setId(1);
         storage.removeUser(1);
         assertThrows(UserNotFoundExeption.class, () -> storage.getUser(1));

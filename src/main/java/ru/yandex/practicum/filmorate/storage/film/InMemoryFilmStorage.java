@@ -17,10 +17,10 @@ public class InMemoryFilmStorage implements FilmStorage{
 
     private Integer counter = 0;
 
-    public Film getFilm(int filmId){
-        if(filmStorage.containsKey(filmId)){
-        return filmStorage.get(filmId);
-        }else {
+    public Film getFilm(int filmId) {
+        if (filmStorage.containsKey(filmId)) {
+            return filmStorage.get(filmId);
+        } else {
             throw new FilmNotFoundExeption("Такой фильм не найден");
         }
     }

@@ -34,7 +34,7 @@ public class InMemoryUserStorage implements UserStorage{
     }
 
     @Override
-    public User postUser(User user) throws MyValidateExeption {
+    public User addUser(User user) throws MyValidateExeption {
         validate(user);
         user.setId(++counter);
         userStorage.put(user.getId(), user);
