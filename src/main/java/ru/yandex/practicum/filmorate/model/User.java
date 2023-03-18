@@ -1,11 +1,10 @@
 package ru.yandex.practicum.filmorate.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
-import org.apache.coyote.http11.filters.SavedRequestInputFilter;
 import ru.yandex.practicum.filmorate.exeptions.FriendAlreadyExistExeption;
 import ru.yandex.practicum.filmorate.exeptions.FriendNotFoundExeption;
 
@@ -17,8 +16,8 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class User extends AbstracItem{
-
+public class User{
+    private int id;
     private String name;
     @Email
     private String email;
@@ -28,25 +27,29 @@ public class User extends AbstracItem{
     @Past
     private LocalDate birthday;
 
-    private FriendStatus friendStatus;
+    @JsonIgnore
+    private Set<Integer> friendsIds = new HashSet<>(); //список друзей пользователя по айдишникам.
 
-    private Set<Long> friendsIds = new HashSet<>(); //список друзей пользователя по айдишникам.
+    public User(int id, String name, String email, String login, LocalDate birthday) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.login = login;
+        this.birthday = birthday;
+    }
 
-    public void addFriend(Long friendId){
-//        if(this.friendStatus.equals(FriendStatus.UNCONFIRMED)) return;
+
+    public void addFriend(Integer friendId){
         if(!friendsIds.add(friendId)){
             throw new FriendAlreadyExistExeption("Друг с таким ай ди уже добавлен");
         }
     }
 
-    public void deleteFriend(Long friendId){
+    public void deleteFriend(Integer friendId){
         if(!friendsIds.remove(friendId)){
             throw new FriendNotFoundExeption("Друг с таким ай ди не найден");
         }
     }
 
-    enum FriendStatus{
-        CONFIRMED, UNCONFIRMED
-    }
 
 }
